@@ -1,0 +1,13 @@
+[project]
+name = "ch03"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "bertviz~=1.2.0",
+  "transformers[tf,torch,onnxruntime,optuna,sentencepiece,sklearn,vision]~=4.16.2",
+]
+
+[tool.uv]
+dev-dependencies = ["notebook~=7.2.2"]
