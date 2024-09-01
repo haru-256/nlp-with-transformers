@@ -2,17 +2,22 @@
 .DEFAULT_GOAL := help
 
 lint: ## Run Linter
-	uvx ruff@latest check .
+	uvx ruff check .
+	uv run mypy .
 
 fmt: ## Run formatter
-	uvx ruff@latest check --fix .
-	uvx ruff@latest format .
+	uvx ruff check --fix .
+	uvx ruff format .
+
+test: ## Run tests
+	uv run pytest .
 
 lock: ## Lock dependencies
 	uv lock
 
 setup: ## Setup the project
 	uv sync
+	uv tool install ruff@0.6.3
 
 help: ## Show options
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \

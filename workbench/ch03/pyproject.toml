@@ -5,9 +5,26 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+  "lightning~=2.4.0",
   "bertviz~=1.2.0",
   "transformers[tf,torch,onnxruntime,optuna,sentencepiece,sklearn,vision]~=4.16.2",
 ]
 
 [tool.uv]
-dev-dependencies = ["notebook~=7.2.2"]
+dev-dependencies = ["notebook~=7.2.2", "pytest~=8.3.2", "mypy~=1.11.2"]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.mypy]
+python_version = "3.9"
+exclude = [".venv"]
+disable_error_code = ["import-untyped"]
+
+[[tool.mypy.overrides]]
+module = ["transformers", "torch.*"]
+ignore_missing_imports = true
