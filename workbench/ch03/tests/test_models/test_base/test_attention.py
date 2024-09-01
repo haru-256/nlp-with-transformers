@@ -1,6 +1,6 @@
 import torch
 
-from models.module.base.attention import scaled_dot_product_attention
+from models.modules.base.attention import scaled_dot_product_attention
 
 
 def test_scaled_dot_product_attention():

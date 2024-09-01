@@ -6,9 +6,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-# TODO: maskの使い方を理解する
-# https://qiita.com/halhorn/items/c91497522be27bde17ce#mask
-# SASRecの場合paddingと未来の情報をmaskする
 def scaled_dot_product_attention(
     query: torch.Tensor,
     key: torch.Tensor,
