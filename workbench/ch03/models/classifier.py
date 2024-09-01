@@ -5,6 +5,8 @@ from utils import create_self_attention_mask
 
 from .module import TransformerEncoder
 
+# TODO: lightningを使ったクラスに変更
+
 
 class TransformerForSequenceClassification(nn.Module):
     def __init__(

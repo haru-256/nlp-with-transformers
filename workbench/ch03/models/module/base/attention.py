@@ -14,28 +14,32 @@ def scaled_dot_product_attention(
     key: torch.Tensor,
     value: torch.Tensor,
     mask: Optional[torch.Tensor] = None,
-):
+) -> tuple[torch.Tensor, torch.Tensor]:
     """Scaled dot-product attentionを計算する
 
     Args:
-        query: query tensor, shape (batch_size, x_seq_len, dim_k)
-        key: key tensor, shape (batch_size, context_seq_len, dim_k)
-        value: value tensor, shape (batch_size, context_seq_len, dim_v)
-        mask: mask boolean tensor, shape (batch_size, x_seq_len, context_seq_len), Default is None. If True, the corresponding value is ignored. False is not ignored.
+        query: query tensor, shape (batch_size, tgt_seq_len, dim_k)
+        key: key tensor, shape (batch_size, src_seq_len, dim_k)
+        value: value tensor, shape (batch_size, src_seq_len, dim_v)
+        mask: mask boolean tensor, shape (batch_size, tgt_seq_len, src_seq_len), Default is None. If True, the corresponding value is ignored. False is not ignored.
 
     Returns:
-        output tensor, shape (batch_size, x_seq_len, dim_v)
+        out: output tensor, shape (batch_size, tgt_seq_len, dim_v)
+        weights: attention weights, shape (batch_size, tgt_seq_len, src_seq_len)
     """
     dim_k = query.size(-1)
     # score: shape (batch_size, x_seq_len, context_seq_len)
     scores = torch.bmm(query, key.transpose(1, 2)) / sqrt(dim_k)
     if mask is not None:
         scores = scores.masked_fill(mask, float("-inf"))
-
     # weights: shape (batch_size, x_seq_len, context_seq_len)
     weights = F.softmax(scores, dim=-1)
     out = torch.bmm(weights, value)
-    return out
+
+    assert torch.isnan(out).sum() == 0, f"out contains NaN: {out=}"
+    assert torch.isnan(weights).sum() == 0, f"weights contains NaN: {weights=}"
+
+    return out, weights
 
 
 class SelfAttentionHead(nn.Module):
