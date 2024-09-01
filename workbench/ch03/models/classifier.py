@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from utils import create_self_attention_mask
 
-from .module import TransformerEncoder
+from .modules import TransformerEncoder
 
 # TODO: lightningを使ったクラスに変更
 
