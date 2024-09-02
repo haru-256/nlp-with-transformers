@@ -25,11 +25,11 @@ def scaled_dot_product_attention(
         weights: attention weights, shape (batch_size, tgt_seq_len, src_seq_len)
     """
     dim_k = query.size(-1)
-    # score: shape (batch_size, x_seq_len, context_seq_len)
+    # score: shape (batch_size, tgt_seq_len, src_seq_len)
     scores = torch.bmm(query, key.transpose(1, 2)) / sqrt(dim_k)
     if mask is not None:
         scores = scores.masked_fill(mask, float("-inf"))
-    # weights: shape (batch_size, x_seq_len, context_seq_len)
+    # weights: shape (batch_size, tgt_seq_len, src_seq_len)
     weights = F.softmax(scores, dim=-1)
     out = torch.bmm(weights, value)
 
