@@ -13,7 +13,6 @@ class Transformer(nn.Module):
         num_encoder_blocks: int,
         num_decoder_blocks: int,
         num_attention_heads: int,
-        intermediate_size: int,
         hidden_dropout_prob: float,
         max_position_embeddings: int,
     ):

@@ -52,7 +52,7 @@ class SelfAttentionHead(nn.Module):
         self.k = nn.Linear(embed_dim, head_dim)
         self.v = nn.Linear(embed_dim, head_dim)
 
-    def forward(self, x: torch.Tensor, attn_mask: Optional[torch.Tensor] = None):
+    def forward(self, x: torch.Tensor, attn_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         自己注意機構を計算する, ある1つのheadに対して計算する
 
@@ -63,7 +63,9 @@ class SelfAttentionHead(nn.Module):
         Returns:
             shape (batch_size, seq_len, head_dim)
         """
-        attn_outputs = scaled_dot_product_attention(self.q(x), self.k(x), self.v(x), mask=attn_mask)
+        attn_outputs, _ = scaled_dot_product_attention(
+            self.q(x), self.k(x), self.v(x), mask=attn_mask
+        )
         return attn_outputs
 
 
@@ -132,7 +134,7 @@ class CrossAttentionHead(nn.Module):
         Returns:
             attention outputs, shape (batch_size, tgt_seq_len, head_dim)
         """
-        attn_outputs = scaled_dot_product_attention(
+        attn_outputs, _ = scaled_dot_product_attention(
             self.q(tgt), self.k(src), self.v(src), mask=attn_mask
         )
         return attn_outputs
