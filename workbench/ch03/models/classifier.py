@@ -1,11 +1,11 @@
 import lightning as L
 import torch
 import torch.nn as nn
+from torchmetrics.classification import BinaryAccuracy
 
 from utils import create_self_attention_mask
 
 from .modules import TransformerEncoder
-from torchmetrics.classification import BinaryAccuracy
 
 
 class Classifier(nn.Module):

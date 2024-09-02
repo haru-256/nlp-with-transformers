@@ -6,7 +6,6 @@ from collections import Counter
 
 import datasets as D
 import lightning as L
-import numpy as np
 import polars as pl
 import spacy
 import torch
