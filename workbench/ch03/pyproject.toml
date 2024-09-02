@@ -13,6 +13,7 @@ dependencies = [
   "spacy[apple]~=3.7.6",
   "numpy~=1.26.4",
   "polars~=1.6.0",
+  "rich~-13.8.0",
 ]
 
 [tool.uv]

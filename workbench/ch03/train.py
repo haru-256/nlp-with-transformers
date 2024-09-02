@@ -2,6 +2,7 @@ import logging
 import pathlib
 
 import lightning as L
+from lightning.pytorch.callbacks import RichProgressBar, ModelSummary
 
 from data.dataset import IMDbDataModule, SpecialTokens
 from models.classifier import TransformerForSequenceClassification
@@ -29,11 +30,16 @@ def main():
         output_dropout_prob=0.5,
         max_position_embeddings=datamodule.max_seq_len + 1,  # +1 for the <cls> token
         num_labels=2,
-        cls_token_pos=reversed_vocab[SpecialTokens.CLS],
+        cls_token_pos=0,  # <cls> token is the first token
         learning_rate=1e-3,
     )
 
-    trainer = L.Trainer(fast_dev_run=10, max_epochs=10, accelerator="cpu")
+    trainer = L.Trainer(
+        max_epochs=10,
+        accelerator="cpu",
+        callbacks=[RichProgressBar(leave=True), ModelSummary(max_depth=4)],
+        detect_anomaly=True,
+    )
     trainer.fit(model=model, datamodule=datamodule)
 
 
