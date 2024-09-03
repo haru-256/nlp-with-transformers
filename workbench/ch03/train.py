@@ -2,7 +2,9 @@ import logging
 import pathlib
 
 import lightning as L
-from lightning.pytorch.callbacks import RichProgressBar, ModelSummary
+import torch
+from lightning.pytorch.callbacks import EarlyStopping, ModelSummary, RichProgressBar
+from torchinfo import summary
 
 from data.dataset import IMDbDataModule, SpecialTokens
 from models.classifier import TransformerForSequenceClassification
@@ -34,10 +36,24 @@ def main():
         learning_rate=1e-3,
     )
 
+    summary(
+        model,
+        input_data=torch.randint(0, vocab_size, (128, datamodule.max_seq_len), dtype=torch.long).to(
+            "cpu"
+        ),
+        depth=4,
+        verbose=1,
+        device="cpu",
+    )
+
     trainer = L.Trainer(
         max_epochs=10,
         accelerator="cpu",
-        callbacks=[RichProgressBar(leave=True), ModelSummary(max_depth=4)],
+        callbacks=[
+            RichProgressBar(leave=True),
+            ModelSummary(max_depth=4),
+            EarlyStopping(monitor="val_loss", mode="min", patience=3),
+        ],
         detect_anomaly=True,
     )
     trainer.fit(model=model, datamodule=datamodule)
